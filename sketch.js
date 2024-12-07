@@ -345,7 +345,7 @@ function draw() {
     
     fill("#E1980C");
     textSize(32);
-    text(":", 224, 260);
+    text(":", 225, 257);
     
     // Draw labels
     textSize(14);
@@ -354,8 +354,8 @@ function draw() {
     
     let minutesLabelX = minutesInput.x+20 + minutesInput.width/2;
     let secondsLabelX = secondsInput.x+20 + secondsInput.width/2;
-    text("minutes", 178, 306);
-    text("seconds", 284, 306);
+    text("minutes", 178, 303);
+    text("seconds", 284, 303);
     
     // Center the clock face
     push();
