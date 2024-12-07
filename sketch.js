@@ -77,10 +77,53 @@ function setup() {
   
   // Initialize time from inputs
   updateTimeFromInputs();
+  
+    windowResized();
 }
 
-function windowResized(){
-  canvas.position((windowWidth-width) / 2 , (windowHeight - height)/2);
+function windowResized() {
+  // Center the canvas
+  canvas.position((windowWidth - width) / 2, (windowHeight - height) / 2);
+
+  // Recalculate positions for inputs and buttons
+  centerX = width / 2 - CLOCK_RADIUS * 1.67;
+  inputY = height / 2 + translateY - 70;
+
+  // Reposition minute input
+  minutesInput.position((windowWidth - width) / 2 + centerX - 70, (windowHeight - height) / 2 + inputY - 20);
+
+  // Reposition second input
+  secondsInput.position((windowWidth - width) / 2 + centerX + 40, (windowHeight - height) / 2 + inputY - 20);
+
+  // Reposition start button
+  startButton.position((windowWidth - width) / 2 + centerX - 70, (windowHeight - height) / 2 + inputY + 100);
+
+  // Reposition control buttons (Cancel, Pause, New Video)
+  let rectangleLeft = width / 2 - (CLOCK_RADIUS * 5.6 / 2);
+  let rectangleRight = width / 2 + (CLOCK_RADIUS * 5.6 / 2);
+  let controlsY = (height / 2 + translateY) - (CLOCK_RADIUS * 3.3 / 2) - 56;
+
+  cancelButton.position((windowWidth - width) / 2 + rectangleLeft + 124, (windowHeight - height) / 2 + controlsY);
+  pauseButton.position((windowWidth - width) / 2 + rectangleLeft + 260, (windowHeight - height) / 2 + controlsY);
+  newVideoButton.position((windowWidth - width) / 2 + rectangleRight - 175, (windowHeight - height) / 2 + controlsY);
+
+  // Reposition iframe if showing video
+  if (currentIframe) {
+    let frameWidth = CLOCK_RADIUS * 5.3;
+    let frameHeight = CLOCK_RADIUS * 3;
+    let videoWidth = frameWidth;
+    let videoHeight = (frameWidth * 9) / 16;
+
+    if (videoHeight > frameHeight) {
+      videoHeight = frameHeight;
+      videoWidth = (frameHeight * 16) / 9;
+    }
+
+    let iframeX = (windowWidth - videoWidth) / 2;
+    let iframeY = (windowHeight - videoHeight) / 2 + translateY;
+
+    currentIframe.position(iframeX, iframeY);
+  }
 }
 
 function createPlayer(videoId) {
@@ -242,7 +285,7 @@ function styleButton(button) {
 }
 
 function draw() {
-  background(10);
+  background('black');
   
   // Update timer if running - moved outside of !showingVideo condition
   if (isRunning) {
@@ -302,7 +345,7 @@ function draw() {
     
     fill("#E1980C");
     textSize(32);
-    text(":", semicolonX, semicolonY);
+    text(":", 224, 260);
     
     // Draw labels
     textSize(14);
@@ -311,8 +354,8 @@ function draw() {
     
     let minutesLabelX = minutesInput.x+20 + minutesInput.width/2;
     let secondsLabelX = secondsInput.x+20 + secondsInput.width/2;
-    text("minutes", minutesLabelX, minutesInput.y + 84);
-    text("seconds", secondsLabelX, secondsInput.y + 84);
+    text("minutes", 178, 306);
+    text("seconds", 284, 306);
     
     // Center the clock face
     push();
@@ -386,6 +429,7 @@ function draw() {
 
 
 function showVideo() {
+  //windowResized()
   showingVideo = true;
   playerReady = false;
   
@@ -446,6 +490,8 @@ function showVideo() {
   let iframeY = (height - videoHeight) / 2 + translateY; // Restored original Y position
   
   currentIframe.position(iframeX, iframeY);
+  
+   windowResized();
   currentIframe.style('border-radius', '8px');
   currentIframe.style('border', 'none');
   
