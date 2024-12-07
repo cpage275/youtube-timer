@@ -345,7 +345,7 @@ function draw() {
     
     fill("#E1980C");
     textSize(32);
-    text(":", 225, 257);
+    text(":", 226, 257);
     
     // Draw labels
     textSize(14);
